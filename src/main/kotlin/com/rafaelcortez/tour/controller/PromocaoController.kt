@@ -1,6 +1,8 @@
 package com.rafaelcortez.tour.controller
 
 import com.rafaelcortez.tour.model.Promocao
+import com.rafaelcortez.tour.service.PromocaoService
+import com.rafaelcortez.tour.service.impl.PromocaoServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.util.concurrent.ConcurrentHashMap
@@ -10,36 +12,26 @@ import java.util.concurrent.ConcurrentHashMap
 class PromocaoController {
 
     @Autowired
-    lateinit var promocoes: ConcurrentHashMap<Long, Promocao>
-
-    @RequestMapping(value = ["/sayHello"], method = arrayOf(RequestMethod.GET))
-    fun sayHello(): String{
-        return "Hello world"
-    }
+    lateinit var service: PromocaoService
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long) = promocoes[id]
+    fun getById(@PathVariable id: Long) =
+        service.getbyId(id)
 
     @GetMapping()
-    fun getByLocal(@RequestParam(required = false, defaultValue = "") localFilter: String) =
-        promocoes.filter {
-            it.value.local.contains(localFilter, true)
-        }.map (Map.Entry<Long, Promocao>:: value).toList()
+    fun getByLocal(@RequestParam(required = false, defaultValue = "") local: String) =
+        service.getByLocal(local)
 
     @PostMapping()
-    fun create(@RequestBody promocao: Promocao){
-        promocoes[promocao.id] = promocao
-    }
+    fun create(@RequestBody promocao: Promocao) =
+        service.create(promocao)
 
     @DeleteMapping("/{id}")
-    fun delete (@PathVariable id: Long) {
-        promocoes.remove(id)
-    }
+    fun delete (@PathVariable id: Long) =
+        service.delete(id)
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody promocao: Promocao){
-        promocoes.remove(promocao.id)
-        promocoes[id] = promocao
-    }
+    fun update(@PathVariable id: Long, @RequestBody promocao: Promocao) =
+        service.update(id, promocao)
 
 }

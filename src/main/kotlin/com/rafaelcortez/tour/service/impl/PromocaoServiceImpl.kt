@@ -2,8 +2,10 @@ package com.rafaelcortez.tour.service.impl
 
 import com.rafaelcortez.tour.model.Promocao
 import com.rafaelcortez.tour.service.PromocaoService
+import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
+@Component
 class PromocaoServiceImpl: PromocaoService {
 
     companion object{
