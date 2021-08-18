@@ -4,6 +4,8 @@ import com.rafaelcortez.tour.model.Promocao
 import com.rafaelcortez.tour.service.PromocaoService
 import com.rafaelcortez.tour.service.impl.PromocaoServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -15,8 +17,12 @@ class PromocaoController {
     lateinit var service: PromocaoService
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long) =
-        service.getbyId(id)
+    fun getById(@PathVariable id: Long): ResponseEntity<Promocao?>{
+        var promocao = service.getbyId(id)
+        var status = if(promocao == null) HttpStatus.NOT_FOUND else HttpStatus.OK
+        return ResponseEntity(promocao, status)
+    }
+
 
     @GetMapping()
     fun getByLocal(@RequestParam(required = false, defaultValue = "") local: String) =
