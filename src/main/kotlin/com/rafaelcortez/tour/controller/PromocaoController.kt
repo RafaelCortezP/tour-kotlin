@@ -29,8 +29,10 @@ class PromocaoController {
         service.getByLocal(local)
 
     @PostMapping()
-    fun create(@RequestBody promocao: Promocao) =
+    fun create(@RequestBody promocao: Promocao): ResponseEntity<Unit> {
         service.create(promocao)
+        return ResponseEntity(Unit,HttpStatus.CREATED)
+    }
 
     @DeleteMapping("/{id}")
     fun delete (@PathVariable id: Long) =
