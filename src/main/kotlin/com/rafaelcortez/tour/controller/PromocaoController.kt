@@ -1,12 +1,14 @@
 package com.rafaelcortez.tour.controller
 
 import com.rafaelcortez.tour.model.Promocao
+import com.rafaelcortez.tour.model.RespostaJson
 import com.rafaelcortez.tour.service.PromocaoService
 import com.rafaelcortez.tour.service.impl.PromocaoServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 @RestController
@@ -32,9 +34,10 @@ class PromocaoController {
     }
 
     @PostMapping()
-    fun create(@RequestBody promocao: Promocao): ResponseEntity<Unit> {
+    fun create(@RequestBody promocao: Promocao): ResponseEntity<RespostaJson> {
         service.create(promocao)
-        return ResponseEntity(Unit,HttpStatus.CREATED)
+        val respostaJson = RespostaJson("OK", Date())
+        return ResponseEntity(respostaJson,HttpStatus.CREATED)
     }
 
     @DeleteMapping("/{id}")
