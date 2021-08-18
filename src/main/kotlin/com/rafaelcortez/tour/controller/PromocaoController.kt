@@ -25,8 +25,11 @@ class PromocaoController {
 
 
     @GetMapping()
-    fun getByLocal(@RequestParam(required = false, defaultValue = "") local: String) =
-        service.getByLocal(local)
+    fun getByLocal(@RequestParam(required = false, defaultValue = "") local: String) : ResponseEntity<List<Promocao>?> {
+        var listaPromocoes = service.getByLocal(local)
+        var status = if(listaPromocoes.size == 0) HttpStatus.NOT_FOUND else HttpStatus.OK
+        return ResponseEntity(listaPromocoes, status)
+    }
 
     @PostMapping()
     fun create(@RequestBody promocao: Promocao): ResponseEntity<Unit> {
@@ -35,11 +38,24 @@ class PromocaoController {
     }
 
     @DeleteMapping("/{id}")
-    fun delete (@PathVariable id: Long) =
-        service.delete(id)
+    fun delete (@PathVariable id: Long): ResponseEntity<Unit> {
+        var status = HttpStatus.NOT_FOUND
+        if(service.getbyId(id) != null){
+            service.delete(id)
+            status = HttpStatus.ACCEPTED
+        }
+        return ResponseEntity(Unit, status)
+    }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody promocao: Promocao) =
-        service.update(id, promocao)
+    fun update(@PathVariable id: Long, @RequestBody promocao: Promocao) : ResponseEntity<Unit>{
+        var status = HttpStatus.NOT_FOUND
+        if(service.getbyId(id) != null){
+            service.update(id, promocao)
+            status = HttpStatus.ACCEPTED
+        }
+        return ResponseEntity(Unit, status)
+    }
+
 
 }
